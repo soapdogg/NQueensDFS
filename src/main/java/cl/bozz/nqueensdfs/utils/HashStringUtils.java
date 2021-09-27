@@ -86,8 +86,7 @@ public class HashStringUtils {
                     final double rotatedY = baseX * rotationY.getX() + baseY * rotationY.getY() + center;
 
                     return new Cell((int) rotatedX, (int)rotatedY);
-                })
-                .collect(Collectors.toCollection(TreeSet::new));
+                }).collect(Collectors.toCollection(TreeSet::new));
 
         return newQueens;
     }
@@ -99,12 +98,11 @@ public class HashStringUtils {
             final int n
     ) {
         // Just flips each queen around one or both axes.
-        final SortedSet<Cell> newQueens = new TreeSet<>();
-        queens.stream()
+        final SortedSet<Cell> newQueens = queens.stream()
                 .map(queen -> new Cell(
                         horizontally ? (n - 1 - queen.getX()) : queen.getX(),
                         vertically ? (n - 1 - queen.getY()) : queen.getY()
-                )).forEach(newQueens::add);
+                )).collect(Collectors.toCollection(TreeSet::new));
 
         return newQueens;
     }
@@ -116,18 +114,16 @@ public class HashStringUtils {
      * @return
      */
     public Set<String> generateHashStrings(final SortedSet<Cell> queens, final int n) {
-        final Set<String> result = new HashSet<>();
-
-        result.add(generateHashString(queens));
-
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a
         // board that's symmetrical on both axes, where rotations and mirroring do nothing... but that's still just 15
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
-        getAllMirrors(queens, n).stream()
+        final Set<String> result =  getAllMirrors(queens, n).stream()
                 .map(mirroredQueens -> getAllRotations(mirroredQueens, n))
                 .flatMap(Collection::stream)
                 .map(this::generateHashString)
-                .forEach(result::add);
+                .collect(Collectors.toCollection(TreeSet::new));
+
+        result.add(generateHashString(queens));
 
         return result;
     }
