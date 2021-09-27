@@ -13,19 +13,7 @@ public class Cell implements Comparable<Cell> {
 
     @Override
     public int compareTo(final Cell cell) {
-        if (cell.getX() > x) {
-            return 1;
-        } else if (cell.getX() == x) {
-            if (cell.getY() > y) {
-                return 1;
-            } else if (cell.getY() == y) {
-                return 0;
-            } else {
-                return -1;
-            }
-        } else {
-            return -1;
-        }
+        return x != cell.getX() ? cell.getX() - x : cell.getY() - y;
     }
 
     @Override
