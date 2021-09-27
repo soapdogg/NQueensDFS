@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class HashStringUtils {
     // Rotation constants. Should have used 4 maps instead of using Cell as a tuple. Eh.
@@ -72,8 +73,7 @@ public class HashStringUtils {
         final Cell rotationX = ROTATIONS_X.get(times);
         final Cell rotationY = ROTATIONS_Y.get(times);
 
-        final SortedSet<Cell> newQueens = new TreeSet<>();
-        queens.stream()
+        final SortedSet<Cell> newQueens = queens.stream()
                 .map(cell -> {
                     // New cell = (Old cell - center) * rotation + center.
                     // Some basic geometry to get the rotation coefficients:
@@ -87,7 +87,7 @@ public class HashStringUtils {
 
                     return new Cell((int) rotatedX, (int)rotatedY);
                 })
-                .forEach(newQueens::add);
+                .collect(Collectors.toCollection(TreeSet::new));
 
         return newQueens;
     }
