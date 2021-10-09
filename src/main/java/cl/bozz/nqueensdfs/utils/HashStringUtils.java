@@ -36,20 +36,6 @@ public class HashStringUtils {
         return results;
     }
 
-    private static Set<Set<Integer>> getAllMirrors(final Set<Integer> queens, final int n) {
-        final Set<Set<Integer>> results = new HashSet<>();
-        results.add(queens);
-
-        final Set<Integer> mirroredQueens1 = mirror(queens, true, false, n);
-        results.add(mirroredQueens1);
-        final Set<Integer> mirroredQueens2 = mirror(queens, false, true, n);
-        results.add(mirroredQueens2);
-        final Set<Integer> mirroredQueens3 = mirror(queens, true, true, n);
-        results.add(mirroredQueens3);
-
-        return results;
-    }
-
     private static Set<NQueensCell> rotateNinetyDegrees(final Set<Integer> queens, final int times, final int n) {
         // Since the center of an even-sided board will be in the middle of a NQueensCell, we need to use decimals.
         // We use (n - 1) because cell positions start at 0 and end at (n - 1).
@@ -77,26 +63,6 @@ public class HashStringUtils {
                 }).collect(Collectors.toCollection(HashSet::new));
     }
 
-    private static Set<Integer> mirror(
-            final Set<Integer> queens,
-            final boolean horizontally,
-            final boolean vertically,
-            final int n
-    ) {
-        // Just flips each queen around one or both axes.
-
-        return queens.stream()
-                .map(queen -> {
-                    int queenX = queen / n;
-                    int queenY = queen % n;
-
-                    int newQueenX = horizontally ? (n - 1 - queenX) : queenX;
-                    int newQueenY = vertically ? (n - 1 - queenY) : queenY;
-
-                    return (newQueenX * n) + newQueenY;
-                }).collect(Collectors.toCollection(HashSet::new));
-    }
-
     /**
      * Generates all rotations of the given queens, then all the mirrors of all the rotations plus the original.
      */
@@ -104,7 +70,7 @@ public class HashStringUtils {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a
         // board that's symmetrical on both axes, where rotations and mirroring do nothing... but that's still just 15
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
-        final Set<String> result =  getAllMirrors(queens, n).stream()
+        final Set<String> result =  MirrorUtil.INSTANCE.getAllMirrors(queens, n).stream()
                 .map(mirroredQueens -> getAllRotations(mirroredQueens, n))
                 .flatMap(Collection::stream)
                 .map(HashStringUtils::generateHashString)
