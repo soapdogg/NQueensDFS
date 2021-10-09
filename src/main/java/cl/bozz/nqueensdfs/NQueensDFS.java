@@ -2,6 +2,7 @@ package cl.bozz.nqueensdfs;
 
 import cl.bozz.nqueensdfs.models.BoardState;
 import cl.bozz.nqueensdfs.utils.BoardPrinter;
+import cl.bozz.nqueensdfs.utils.ChildBoardStateGenerator;
 import cl.bozz.nqueensdfs.utils.HashStringUtils;
 
 import java.time.Instant;
@@ -13,10 +14,10 @@ public class NQueensDFS {
     public static void main(final String[] args) {
 
         final int n = 8;
-        new NQueensDFS().start(n);
+        start(n);
     }
 
-    public void start(final int n) {
+    public static void start(final int n) {
         final long totalCells = (long) n * n;
         final long totalPermutations = totalPermutations(totalCells, n);
 
@@ -24,7 +25,6 @@ public class NQueensDFS {
         final HashStringUtils hashStringUtils = new HashStringUtils();
         final Stack<BoardState> boardStateStack = new Stack<>();
         final Set<BoardState> terminalBoardStates = new HashSet<>();
-        final Set<String> boardStateHashes = new HashSet<>();
 
         long totalBoardsProcessed = 0;
         long totalTerminalBoards = 0;
@@ -39,7 +39,7 @@ public class NQueensDFS {
         }
         final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells);
         boardStateStack.add(initialBoardState);
-        boardStateHashes.addAll(hashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n));
+        final Set<String> boardStateHashes = new HashSet<>(hashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n));
 
         final Instant start = Instant.now();
 
@@ -61,7 +61,7 @@ public class NQueensDFS {
             }
 
             // 3. Generate child boards. For each...
-            final Set<BoardState> newBoardStates = boardState.generateChildBoardStates(n);
+            final Set<BoardState> newBoardStates = ChildBoardStateGenerator.INSTANCE.generateChildBoardStates(boardState, n);
             for(final BoardState newBoardState : newBoardStates) {
                 // 3.a. Generate all 90-degree rotations for each board, and all their mirrors as well
                 //      Using a Set here ensures there's no accidental repetition.

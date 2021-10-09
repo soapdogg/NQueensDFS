@@ -1,15 +1,19 @@
 package cl.bozz.nqueensdfs.models;
 
+import cl.bozz.nqueensdfs.utils.DiagonalChecker;
 import lombok.Value;
 
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @Value
 public class BoardState {
     private final Set<Integer> queenPositions;
     private final Set<Integer> availableCells;
+
+    public Set<Integer> getAvailableCells() {
+        return availableCells;
+    }
 
     public Set<Integer> getQueenPositions() {
         return queenPositions;
@@ -35,8 +39,7 @@ public class BoardState {
         }
 
         // Prepare new available cells, minus new queen
-        final Set<Integer> newAvailableCells = new HashSet<>();
-        newAvailableCells.addAll(availableCells);
+        final Set<Integer> newAvailableCells = new HashSet<>(availableCells);
         newAvailableCells.remove(cell);
 
         // Try to remove vertical/horizontal rows under the new queen's range
@@ -58,66 +61,19 @@ public class BoardState {
 
         // Try to remove diagonal rows under the new queen's range
         if (
-                !performDiagonalCheck(cellX, cellY, -1, -1, newAvailableCells, boardSize)
-                || !performDiagonalCheck(cellX, cellY,  1, -1, newAvailableCells, boardSize)
-                || !performDiagonalCheck(cellX, cellY,  -1, 1, newAvailableCells, boardSize)
-                || !performDiagonalCheck(cellX, cellY,  1, 1, newAvailableCells, boardSize)
+                DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY, -1, -1, newAvailableCells, queenPositions, boardSize)
+                || DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY,  1, -1, newAvailableCells, queenPositions, boardSize)
+                || DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY,  -1, 1, newAvailableCells, queenPositions, boardSize)
+                || DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY,  1, 1, newAvailableCells, queenPositions, boardSize)
         ) {
             return null;
         }
 
         // Copy queen positions, plus new queen
-        final Set<Integer> newQueenPositions = new HashSet<>();
-        newQueenPositions.addAll(queenPositions);
+        final Set<Integer> newQueenPositions = new HashSet<>(queenPositions);
         newQueenPositions.add(cell);
 
         // Done!
         return new BoardState(newQueenPositions, newAvailableCells);
-    }
-
-    private boolean performDiagonalCheck(
-            final int cellX,
-            final int cellY,
-            final int xDelta,
-            final int yDelta,
-            final Set<Integer> newAvailableCells,
-            final int boardSize
-    ) {
-        // Prepare initial check, this way we don't have to avoid queen self-attack false positives
-        int x = cellX + xDelta;
-        int y = cellY + yDelta;
-
-        // First good fit for a do-while I've seen in a long time!
-        do {
-            final int diagCellInt = (x * boardSize) + y;
-            if (queenPositions.contains(diagCellInt)) {
-                return false;
-            }
-
-            newAvailableCells.remove(diagCellInt);
-
-            x += xDelta;
-            y += yDelta;
-        }
-        while (
-                x >= 0 && x < boardSize
-                && y >= 0 && y < boardSize
-        );
-
-        return true;
-    }
-
-    /**
-     * "Recursion" step: try to create new boards for every currently available cell.
-     */
-    public Set<BoardState> generateChildBoardStates(int boardSize) {
-        final Set<BoardState> result = new HashSet<>();
-
-        availableCells.stream()
-                .map(availableCell -> addQueen(availableCell, boardSize))
-                .filter(Objects::nonNull) // Filter out failed attempts
-                .forEach(result::add);
-
-        return result;
     }
 }
