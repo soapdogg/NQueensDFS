@@ -31,17 +31,11 @@ public class HashStringUtils {
         results.add(nq);
 
         final Set<NQueensCell> rotatedQueens1 = rotateNinetyDegrees(queens, 1, n);
-        if (rotatedQueens1 != null) {
-            results.add(rotatedQueens1);
-        }
+        results.add(rotatedQueens1);
         final Set<NQueensCell> rotatedQueens2 = rotateNinetyDegrees(queens, 2, n);
-        if (rotatedQueens2 != null) {
-            results.add(rotatedQueens2);
-        }
+        results.add(rotatedQueens2);
         final Set<NQueensCell> rotatedQueens3 = rotateNinetyDegrees(queens, 3, n);
-        if (rotatedQueens3 != null) {
-            results.add(rotatedQueens3);
-        }
+        results.add(rotatedQueens3);
 
         return results;
     }
@@ -51,17 +45,11 @@ public class HashStringUtils {
         results.add(queens);
 
         final Set<Integer> mirroredQueens1 = mirror(queens, true, false, n);
-        if (mirroredQueens1 != null) {
-            results.add(mirroredQueens1);
-        }
+        results.add(mirroredQueens1);
         final Set<Integer> mirroredQueens2 = mirror(queens, false, true, n);
-        if (mirroredQueens2 != null) {
-            results.add(mirroredQueens2);
-        }
+        results.add(mirroredQueens2);
         final Set<Integer> mirroredQueens3 = mirror(queens, true, true, n);
-        if (mirroredQueens3 != null) {
-            results.add(mirroredQueens3);
-        }
+        results.add(mirroredQueens3);
 
         return results;
     }
@@ -75,7 +63,7 @@ public class HashStringUtils {
         final NQueensCell rotationX = ROTATIONS_X.get(times);
         final NQueensCell rotationY = ROTATIONS_Y.get(times);
 
-        final Set<NQueensCell> newQueens = queens.stream()
+        return queens.stream()
                 .map(cell -> {
                     // New cell = (Old cell - center) * rotation + center.
                     // Some basic geometry to get the rotation coefficients:
@@ -91,8 +79,6 @@ public class HashStringUtils {
 
                     return new NQueensCell((int) rotatedX, (int)rotatedY);
                 }).collect(Collectors.toCollection(HashSet::new));
-
-        return newQueens;
     }
 
     private Set<Integer> mirror(
