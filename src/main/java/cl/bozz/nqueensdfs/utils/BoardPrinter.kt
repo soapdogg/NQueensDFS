@@ -1,7 +1,5 @@
 package cl.bozz.nqueensdfs.utils
 
-import cl.bozz.nqueensdfs.NQueensDFS
-import cl.bozz.nqueensdfs.datamodels.NQueensCell
 import cl.bozz.nqueensdfs.models.BoardState
 
 object BoardPrinter {

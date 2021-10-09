@@ -1,6 +1,5 @@
 package cl.bozz.nqueensdfs;
 
-import cl.bozz.nqueensdfs.datamodels.NQueensCell;
 import cl.bozz.nqueensdfs.models.BoardState;
 import cl.bozz.nqueensdfs.utils.BoardPrinter;
 import cl.bozz.nqueensdfs.utils.HashStringUtils;

@@ -1,6 +1,5 @@
 package cl.bozz.nqueensdfs.models;
 
-import cl.bozz.nqueensdfs.datamodels.NQueensCell;
 import lombok.Value;
 
 import java.util.HashSet;
@@ -20,16 +19,17 @@ public class BoardState {
      * Create a new board that's identical to this one, but with one additional queen in a given position. Returns null
      * if a new board is not viable.
      */
-    public BoardState addQueen(final NQueensCell cell, final int boardSize) {
+    public BoardState addQueen(final int cell, final int boardSize) {
         // Edge cases to terminate recursive DFS. Some are redundant, but who cares?
-        int cellInt = (cell.getX() * boardSize) + cell.getY();
+        int cellX = cell / boardSize;
+        int cellY = cell % boardSize;
         if (
                 queenPositions.size() == boardSize             // Terminal board, can't add more queens
                 || availableCells.isEmpty()            // Can't add any more queens due to space or attack constraints
-                || !availableCells.contains(cellInt)      // Trying to put a queen in an unavailable cell
+                || !availableCells.contains(cell)      // Trying to put a queen in an unavailable cell
                 || queenPositions.contains(cell)       // This queen already exists
-                || cell.getX() < 0 || cell.getX() >= boardSize // Out of bounds - X
-                || cell.getY() < 0 || cell.getY() >= boardSize // Out of bounds - Y
+                || cellX < 0 || cellX >= boardSize // Out of bounds - X
+                || cellY < 0 || cellY >= boardSize // Out of bounds - Y
         ) {
             return null;
         }
@@ -41,8 +41,8 @@ public class BoardState {
 
         // Try to remove vertical/horizontal rows under the new queen's range
         for (int i = 0; i < boardSize; i ++) {
-            final int horizontalCellInt = (i * boardSize) + cell.getY();
-            final int verticalCellInt = (cell.getX() * boardSize) + i;
+            final int horizontalCellInt = (i * boardSize) + cellY;
+            final int verticalCellInt = (cellX * boardSize) + i;
             // We do this *before* updating the queen list to avoid self-attack false positives
             if (
                     queenPositions.contains(horizontalCellInt)
@@ -58,10 +58,10 @@ public class BoardState {
 
         // Try to remove diagonal rows under the new queen's range
         if (
-                !performDiagonalCheck(cell, -1, -1, newAvailableCells, boardSize)
-                || !performDiagonalCheck(cell, 1, -1, newAvailableCells, boardSize)
-                || !performDiagonalCheck(cell, -1, 1, newAvailableCells, boardSize)
-                || !performDiagonalCheck(cell, 1, 1, newAvailableCells, boardSize)
+                !performDiagonalCheck(cellX, cellY, -1, -1, newAvailableCells, boardSize)
+                || !performDiagonalCheck(cellX, cellY,  1, -1, newAvailableCells, boardSize)
+                || !performDiagonalCheck(cellX, cellY,  -1, 1, newAvailableCells, boardSize)
+                || !performDiagonalCheck(cellX, cellY,  1, 1, newAvailableCells, boardSize)
         ) {
             return null;
         }
@@ -69,28 +69,28 @@ public class BoardState {
         // Copy queen positions, plus new queen
         final Set<Integer> newQueenPositions = new HashSet<>();
         newQueenPositions.addAll(queenPositions);
-        newQueenPositions.add(cellInt);
+        newQueenPositions.add(cell);
 
         // Done!
         return new BoardState(newQueenPositions, newAvailableCells);
     }
 
     private boolean performDiagonalCheck(
-            final NQueensCell cell,
+            final int cellX,
+            final int cellY,
             final int xDelta,
             final int yDelta,
             final Set<Integer> newAvailableCells,
             final int boardSize
     ) {
         // Prepare initial check, this way we don't have to avoid queen self-attack false positives
-        int x = cell.getX() + xDelta;
-        int y = cell.getY() + yDelta;
+        int x = cellX + xDelta;
+        int y = cellY + yDelta;
 
         // First good fit for a do-while I've seen in a long time!
         do {
-            final NQueensCell diagCell = new NQueensCell (x, y);
             final int diagCellInt = (x * boardSize) + y;
-            if (queenPositions.contains(diagCell)) {
+            if (queenPositions.contains(diagCellInt)) {
                 return false;
             }
 
@@ -114,7 +114,7 @@ public class BoardState {
         final Set<BoardState> result = new HashSet<>();
 
         availableCells.stream()
-                .map(availableCell -> addQueen(new NQueensCell(availableCell / boardSize, availableCell % boardSize) , boardSize))
+                .map(availableCell -> addQueen(availableCell, boardSize))
                 .filter(Objects::nonNull) // Filter out failed attempts
                 .forEach(result::add);
 
