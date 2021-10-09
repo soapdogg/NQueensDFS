@@ -5,7 +5,6 @@ import cl.bozz.nqueensdfs.datamodels.NQueensCell;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class HashStringUtils {
@@ -74,7 +73,7 @@ public class HashStringUtils {
                 .map(mirroredQueens -> getAllRotations(mirroredQueens, n))
                 .flatMap(Collection::stream)
                 .map(HashStringUtils::generateHashString)
-                .collect(Collectors.toCollection(TreeSet::new));
+                .collect(Collectors.toSet());
 
         Set<NQueensCell> nq = queens.stream().map(
                 queen -> new NQueensCell(queen / n, queen % n)
@@ -85,12 +84,12 @@ public class HashStringUtils {
     }
 
     private static String generateHashString(final Set<NQueensCell> queenList) {
-        final StringBuilder stringBuilder = new StringBuilder();
+        String result = "";
 
         for (final NQueensCell queenCell : queenList) {
-            stringBuilder.append(queenCell);
+            result += queenCell;
         }
 
-        return stringBuilder.toString();
+        return result;
     }
 }
