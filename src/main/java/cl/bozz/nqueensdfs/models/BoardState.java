@@ -9,10 +9,10 @@ import java.util.Set;
 
 @Value
 public class BoardState {
-    private final Set<NQueensCell> queenPositions;
+    private final Set<Integer> queenPositions;
     private final Set<Integer> availableCells;
 
-    public  Set<NQueensCell> getQueenPositions() {
+    public Set<Integer> getQueenPositions() {
         return queenPositions;
     }
 
@@ -69,9 +69,9 @@ public class BoardState {
         }
 
         // Copy queen positions, plus new queen
-        final Set<NQueensCell> newQueenPositions = new HashSet<>();
+        final Set<Integer> newQueenPositions = new HashSet<>();
         newQueenPositions.addAll(queenPositions);
-        newQueenPositions.add(cell);
+        newQueenPositions.add(cellInt);
 
         // Done!
         return new BoardState(newQueenPositions, newAvailableCells);

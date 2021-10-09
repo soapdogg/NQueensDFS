@@ -43,9 +43,12 @@ public class HashStringUtils {
         return results;
     }
 
-    public Set<Set<NQueensCell>> getAllMirrors(final Set<NQueensCell> queens, final int n) {
+    public Set<Set<NQueensCell>> getAllMirrors(final Set<Integer> queens, final int n) {
         final Set<Set<NQueensCell>> results = new HashSet<>();
-        results.add(queens);
+        Set<NQueensCell> nq = queens.stream().map(
+                queen -> new NQueensCell(queen / n, queen % n)
+        ).collect(Collectors.toSet());
+        results.add(nq);
 
         final Set<NQueensCell> mirroredQueens1 = mirror(queens, true, false, n);
         if (mirroredQueens1 != null) {
@@ -91,17 +94,22 @@ public class HashStringUtils {
     }
 
     private Set<NQueensCell> mirror(
-            final Set<NQueensCell> queens,
+            final Set<Integer> queens,
             final boolean horizontally,
             final boolean vertically,
             final int n
     ) {
         // Just flips each queen around one or both axes.
+
         final Set<NQueensCell> newQueens = queens.stream()
-                .map(queen -> new NQueensCell(
-                        horizontally ? (n - 1 - queen.getX()) : queen.getX(),
-                        vertically ? (n - 1 - queen.getY()) : queen.getY()
-                )).collect(Collectors.toCollection(HashSet::new));
+                .map(queen -> {
+                    int queenX = queen / n;
+                    int queenY = queen % n;
+                    return new NQueensCell(
+                        horizontally ? (n - 1 - queenX) : queenX,
+                        vertically ? (n - 1 - queenY) : queenY
+                    );
+                }).collect(Collectors.toCollection(HashSet::new));
 
         return newQueens;
     }
@@ -112,7 +120,7 @@ public class HashStringUtils {
      * @param n
      * @return
      */
-    public Set<String> generateHashStrings(final Set<NQueensCell> queens, final int n) {
+    public Set<String> generateHashStrings(final Set<Integer> queens, final int n) {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a
         // board that's symmetrical on both axes, where rotations and mirroring do nothing... but that's still just 15
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
@@ -122,7 +130,10 @@ public class HashStringUtils {
                 .map(this::generateHashString)
                 .collect(Collectors.toCollection(TreeSet::new));
 
-        result.add(generateHashString(queens));
+        Set<NQueensCell> nq = queens.stream().map(
+                queen -> new NQueensCell(queen / n, queen % n)
+        ).collect(Collectors.toSet());
+        result.add(generateHashString(nq));
 
         return result;
     }

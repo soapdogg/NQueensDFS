@@ -9,7 +9,7 @@ object BoardPrinter {
     fun printBoard(board: BoardState, boardSize: Int) {
         for (i in 0 until boardSize) {
             for (j in 0 until boardSize) {
-                val cell = NQueensCell(i, j)
+                val cell = (i * boardSize) + j
                 if (board.queenPositions.contains(cell)) {
                     print('Q')
                 } else {
