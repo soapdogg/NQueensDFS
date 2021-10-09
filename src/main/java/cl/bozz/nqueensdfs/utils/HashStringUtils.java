@@ -21,7 +21,7 @@ public class HashStringUtils {
         new NQueensCell(-1, 0)
     };
 
-    public static Set<Set<NQueensCell>> getAllRotations(final Set<Integer> queens, final int n) {
+    private static Set<Set<NQueensCell>> getAllRotations(final Set<Integer> queens, final int n) {
         final Set<Set<NQueensCell>> results = new HashSet<>();
         Set<NQueensCell> nq = queens.stream().map(
                 queen -> new NQueensCell(queen / n, queen % n)
@@ -36,7 +36,7 @@ public class HashStringUtils {
         return results;
     }
 
-    public static Set<Set<Integer>> getAllMirrors(final Set<Integer> queens, final int n) {
+    private static Set<Set<Integer>> getAllMirrors(final Set<Integer> queens, final int n) {
         final Set<Set<Integer>> results = new HashSet<>();
         results.add(queens);
 

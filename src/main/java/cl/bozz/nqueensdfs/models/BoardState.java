@@ -29,11 +29,9 @@ public class BoardState {
         int cellY = cell % boardSize;
         if (
                 queenPositions.size() == boardSize             // Terminal board, can't add more queens
-                || availableCells.isEmpty()            // Can't add any more queens due to space or attack constraints
-                || !availableCells.contains(cell)      // Trying to put a queen in an unavailable cell
                 || queenPositions.contains(cell)       // This queen already exists
-                || cellX < 0 || cellX >= boardSize // Out of bounds - X
-                || cellY < 0 || cellY >= boardSize // Out of bounds - Y
+                //|| cellX < 0 || cellX >= boardSize // Out of bounds - X
+                //|| cellY < 0 || cellY >= boardSize // Out of bounds - Y
         ) {
             return null;
         }

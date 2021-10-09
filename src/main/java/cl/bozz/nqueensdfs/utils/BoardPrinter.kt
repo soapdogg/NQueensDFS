@@ -16,5 +16,6 @@ object BoardPrinter {
             }
             println()
         }
+        println()
     }
 }
