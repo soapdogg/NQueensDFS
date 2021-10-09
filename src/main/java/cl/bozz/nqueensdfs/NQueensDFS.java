@@ -1,7 +1,7 @@
 package cl.bozz.nqueensdfs;
 
+import cl.bozz.nqueensdfs.datamodels.NQueensCell;
 import cl.bozz.nqueensdfs.models.BoardState;
-import cl.bozz.nqueensdfs.models.Cell;
 import cl.bozz.nqueensdfs.utils.HashStringUtils;
 
 import java.math.BigInteger;
@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
-import java.util.TreeSet;
 
 public class NQueensDFS {
     public static void main(final String[] args) {
@@ -33,10 +32,10 @@ public class NQueensDFS {
         long totalPrunedBoards = 0;
 
         // Set up initial board
-        final Set<Cell> initialAvailableCells = new HashSet<>();
+        final Set<NQueensCell> initialAvailableCells = new HashSet<>();
         for (int x = 0; x < n; x ++) {
             for (int y = 0; y < n; y ++) {
-                initialAvailableCells.add(new Cell(x, y));
+                initialAvailableCells.add(new NQueensCell(x, y));
             }
         }
         final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells, n);
