@@ -13,7 +13,7 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 9;
+        final int n = 8;
         new NQueensDFS().start(n);
     }
 
@@ -32,10 +32,10 @@ public class NQueensDFS {
         long totalPrunedBoards = 0;
 
         // Set up initial board
-        final Set<NQueensCell> initialAvailableCells = new HashSet<>();
+        final Set<Integer> initialAvailableCells = new HashSet<>();
         for (int x = 0; x < n; x ++) {
             for (int y = 0; y < n; y ++) {
-                initialAvailableCells.add(new NQueensCell(x, y));
+                initialAvailableCells.add((x * n) + y);
             }
         }
         final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells);

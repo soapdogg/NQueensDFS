@@ -10,7 +10,7 @@ import java.util.Set;
 @Value
 public class BoardState {
     private final Set<NQueensCell> queenPositions;
-    private final Set<NQueensCell> availableCells;
+    private final Set<Integer> availableCells;
 
     public  Set<NQueensCell> getQueenPositions() {
         return queenPositions;
@@ -22,10 +22,11 @@ public class BoardState {
      */
     public BoardState addQueen(final NQueensCell cell, final int boardSize) {
         // Edge cases to terminate recursive DFS. Some are redundant, but who cares?
+        int cellInt = (cell.getX() * boardSize) + cell.getY();
         if (
                 queenPositions.size() == boardSize             // Terminal board, can't add more queens
                 || availableCells.isEmpty()            // Can't add any more queens due to space or attack constraints
-                || !availableCells.contains(cell)      // Trying to put a queen in an unavailable cell
+                || !availableCells.contains(cellInt)      // Trying to put a queen in an unavailable cell
                 || queenPositions.contains(cell)       // This queen already exists
                 || cell.getX() < 0 || cell.getX() >= boardSize // Out of bounds - X
                 || cell.getY() < 0 || cell.getY() >= boardSize // Out of bounds - Y
@@ -34,14 +35,16 @@ public class BoardState {
         }
 
         // Prepare new available cells, minus new queen
-        final Set<NQueensCell> newAvailableCells = new HashSet<NQueensCell>();
+        final Set<Integer> newAvailableCells = new HashSet<>();
         newAvailableCells.addAll(availableCells);
         newAvailableCells.remove(cell);
 
         // Try to remove vertical/horizontal rows under the new queen's range
         for (int i = 0; i < boardSize; i ++) {
             final NQueensCell horizontalCell = new NQueensCell(i, cell.getY());
+            final int horizontalCellInt = (i * boardSize) + cell.getY();
             final NQueensCell verticalCell = new NQueensCell(cell.getX(), i);
+            final int verticalCellInt = (cell.getX() * boardSize) + i;
             // We do this *before* updating the queen list to avoid self-attack false positives
             if (
                     queenPositions.contains(horizontalCell)
@@ -51,8 +54,8 @@ public class BoardState {
                 return null;
             }
 
-            newAvailableCells.remove(horizontalCell);
-            newAvailableCells.remove(verticalCell);
+            newAvailableCells.remove(horizontalCellInt);
+            newAvailableCells.remove(verticalCellInt);
         }
 
         // Try to remove diagonal rows under the new queen's range
@@ -78,7 +81,7 @@ public class BoardState {
             final NQueensCell cell,
             final int xDelta,
             final int yDelta,
-            final Set<NQueensCell> newAvailableCells,
+            final Set<Integer> newAvailableCells,
             final int boardSize
     ) {
         // Prepare initial check, this way we don't have to avoid queen self-attack false positives
@@ -88,11 +91,12 @@ public class BoardState {
         // First good fit for a do-while I've seen in a long time!
         do {
             final NQueensCell diagCell = new NQueensCell (x, y);
+            final int diagCellInt = (x * boardSize) + y;
             if (queenPositions.contains(diagCell)) {
                 return false;
             }
 
-            newAvailableCells.remove(diagCell);
+            newAvailableCells.remove(diagCellInt);
 
             x += xDelta;
             y += yDelta;
@@ -112,7 +116,7 @@ public class BoardState {
         final Set<BoardState> result = new HashSet<>();
 
         availableCells.stream()
-                .map(availableCell -> addQueen(availableCell, boardSize))
+                .map(availableCell -> addQueen(new NQueensCell(availableCell / boardSize, availableCell % boardSize) , boardSize))
                 .filter(Objects::nonNull) // Filter out failed attempts
                 .forEach(result::add);
 
