@@ -3,25 +3,23 @@ package cl.bozz.nqueensdfs.utils;
 import cl.bozz.nqueensdfs.datamodels.NQueensCell;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class HashStringUtils {
     // Rotation constants. Should have used 4 maps instead of using Cell as a tuple. Eh.
-    private static final Map<Integer, NQueensCell> ROTATIONS_X = new HashMap<Integer, NQueensCell>() {{
-        put(1, new NQueensCell(0, -1));
-        put(2, new NQueensCell(-1, 0));
-        put(3, new NQueensCell(0, 1));
-    }};
-    private static final Map<Integer, NQueensCell> ROTATIONS_Y = new HashMap<Integer, NQueensCell>() {{
-        put(1, new NQueensCell(1, 0));
-        put(2, new NQueensCell(0, -1));
-        put(3, new NQueensCell(-1, 0));
-    }};
+    private static final NQueensCell[] ROTATIONS_X =  {
+        new NQueensCell(0, -1),
+        new NQueensCell(-1, 0),
+        new NQueensCell(0, 1)
+    };
+    private static final NQueensCell[] ROTATIONS_Y = {
+            new NQueensCell(1, 0),
+            new NQueensCell(0, -1),
+            new NQueensCell(-1, 0)
+    };
 
     public Set<Set<NQueensCell>> getAllRotations(final Set<Integer> queens, final int n) {
         final Set<Set<NQueensCell>> results = new HashSet<>();
@@ -60,8 +58,8 @@ public class HashStringUtils {
         final double center = (double)(n - 1) / 2;
 
         // I still think using Cell for this is stupid, but I don't want to bother with fixing it.
-        final NQueensCell rotationX = ROTATIONS_X.get(times);
-        final NQueensCell rotationY = ROTATIONS_Y.get(times);
+        final NQueensCell rotationX = ROTATIONS_X[times -1];
+        final NQueensCell rotationY = ROTATIONS_Y[times - 1];
 
         return queens.stream()
                 .map(cell -> {

@@ -12,7 +12,7 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 9;
+        final int n = 8;
         new NQueensDFS().start(n);
     }
 
