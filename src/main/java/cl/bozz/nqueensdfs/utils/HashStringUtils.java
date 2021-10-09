@@ -23,9 +23,12 @@ public class HashStringUtils {
         put(3, new NQueensCell(-1, 0));
     }};
 
-    public Set<Set<NQueensCell>> getAllRotations(final Set<NQueensCell> queens, final int n) {
+    public Set<Set<NQueensCell>> getAllRotations(final Set<Integer> queens, final int n) {
         final Set<Set<NQueensCell>> results = new HashSet<>();
-        results.add(queens);
+        Set<NQueensCell> nq = queens.stream().map(
+                queen -> new NQueensCell(queen / n, queen % n)
+        ).collect(Collectors.toSet());
+        results.add(nq);
 
         final Set<NQueensCell> rotatedQueens1 = rotateNinetyDegrees(queens, 1, n);
         if (rotatedQueens1 != null) {
@@ -43,22 +46,19 @@ public class HashStringUtils {
         return results;
     }
 
-    public Set<Set<NQueensCell>> getAllMirrors(final Set<Integer> queens, final int n) {
-        final Set<Set<NQueensCell>> results = new HashSet<>();
-        Set<NQueensCell> nq = queens.stream().map(
-                queen -> new NQueensCell(queen / n, queen % n)
-        ).collect(Collectors.toSet());
-        results.add(nq);
+    public Set<Set<Integer>> getAllMirrors(final Set<Integer> queens, final int n) {
+        final Set<Set<Integer>> results = new HashSet<>();
+        results.add(queens);
 
-        final Set<NQueensCell> mirroredQueens1 = mirror(queens, true, false, n);
+        final Set<Integer> mirroredQueens1 = mirror(queens, true, false, n);
         if (mirroredQueens1 != null) {
             results.add(mirroredQueens1);
         }
-        final Set<NQueensCell> mirroredQueens2 = mirror(queens, false, true, n);
+        final Set<Integer> mirroredQueens2 = mirror(queens, false, true, n);
         if (mirroredQueens2 != null) {
             results.add(mirroredQueens2);
         }
-        final Set<NQueensCell> mirroredQueens3 = mirror(queens, true, true, n);
+        final Set<Integer> mirroredQueens3 = mirror(queens, true, true, n);
         if (mirroredQueens3 != null) {
             results.add(mirroredQueens3);
         }
@@ -66,7 +66,7 @@ public class HashStringUtils {
         return results;
     }
 
-    private Set<NQueensCell> rotateNinetyDegrees(final Set<NQueensCell> queens, final int times, final int n) {
+    private Set<NQueensCell> rotateNinetyDegrees(final Set<Integer> queens, final int times, final int n) {
         // Since the center of an even-sided board will be in the middle of a NQueensCell, we need to use decimals.
         // We use (n - 1) because cell positions start at 0 and end at (n - 1).
         final double center = (double)(n - 1) / 2;
@@ -81,8 +81,10 @@ public class HashStringUtils {
                     // Some basic geometry to get the rotation coefficients:
                     // x_prime = x * cos(theta) - y * sin(theta)
                     // y_prime = x * sin(theta) + y * cos(theta)
-                    final double baseX = (double)cell.getX() - center;
-                    final double baseY = (double)cell.getY() - center;
+                    int cellX = cell / n;
+                    int cellY = cell % n;
+                    final double baseX = (double)cellX - center;
+                    final double baseY = (double)cellY - center;
 
                     final double rotatedX = baseX * rotationX.getX() + baseY * rotationX.getY() + center;
                     final double rotatedY = baseX * rotationY.getX() + baseY * rotationY.getY() + center;
@@ -93,7 +95,7 @@ public class HashStringUtils {
         return newQueens;
     }
 
-    private Set<NQueensCell> mirror(
+    private Set<Integer> mirror(
             final Set<Integer> queens,
             final boolean horizontally,
             final boolean vertically,
@@ -101,24 +103,22 @@ public class HashStringUtils {
     ) {
         // Just flips each queen around one or both axes.
 
-        final Set<NQueensCell> newQueens = queens.stream()
+        return queens.stream()
                 .map(queen -> {
                     int queenX = queen / n;
                     int queenY = queen % n;
-                    return new NQueensCell(
-                        horizontally ? (n - 1 - queenX) : queenX,
-                        vertically ? (n - 1 - queenY) : queenY
-                    );
-                }).collect(Collectors.toCollection(HashSet::new));
 
-        return newQueens;
+                    int newQueenX = horizontally ? (n - 1 - queenX) : queenX;
+                    int newQueenY = vertically ? (n - 1 - queenY) : queenY;
+
+                    return (newQueenX * n) + newQueenY;
+                }).collect(Collectors.toCollection(HashSet::new));
     }
 
     /**
      * Generates all rotations of the given queens, then all the mirrors of all the rotations plus the original.
      * @param queens
      * @param n
-     * @return
      */
     public Set<String> generateHashStrings(final Set<Integer> queens, final int n) {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a

@@ -41,14 +41,12 @@ public class BoardState {
 
         // Try to remove vertical/horizontal rows under the new queen's range
         for (int i = 0; i < boardSize; i ++) {
-            final NQueensCell horizontalCell = new NQueensCell(i, cell.getY());
             final int horizontalCellInt = (i * boardSize) + cell.getY();
-            final NQueensCell verticalCell = new NQueensCell(cell.getX(), i);
             final int verticalCellInt = (cell.getX() * boardSize) + i;
             // We do this *before* updating the queen list to avoid self-attack false positives
             if (
-                    queenPositions.contains(horizontalCell)
-                    || queenPositions.contains(verticalCell)
+                    queenPositions.contains(horizontalCellInt)
+                    || queenPositions.contains(verticalCellInt)
             ) {
                 // Attacking another queen, discard
                 return null;
