@@ -16,9 +16,9 @@ public class HashStringUtils {
         new NQueensCell(0, 1)
     };
     private static final NQueensCell[] ROTATIONS_Y = {
-            new NQueensCell(1, 0),
-            new NQueensCell(0, -1),
-            new NQueensCell(-1, 0)
+        new NQueensCell(1, 0),
+        new NQueensCell(0, -1),
+        new NQueensCell(-1, 0)
     };
 
     public Set<Set<NQueensCell>> getAllRotations(final Set<Integer> queens, final int n) {
@@ -28,12 +28,10 @@ public class HashStringUtils {
         ).collect(Collectors.toSet());
         results.add(nq);
 
-        final Set<NQueensCell> rotatedQueens1 = rotateNinetyDegrees(queens, 1, n);
-        results.add(rotatedQueens1);
-        final Set<NQueensCell> rotatedQueens2 = rotateNinetyDegrees(queens, 2, n);
-        results.add(rotatedQueens2);
-        final Set<NQueensCell> rotatedQueens3 = rotateNinetyDegrees(queens, 3, n);
-        results.add(rotatedQueens3);
+        for (int i = 0; i <= 2; ++i) {
+            Set<NQueensCell> rotatedQueens1 = rotateNinetyDegrees(queens, i, n);
+            results.add(rotatedQueens1);
+        }
 
         return results;
     }
@@ -58,8 +56,8 @@ public class HashStringUtils {
         final double center = (double)(n - 1) / 2;
 
         // I still think using Cell for this is stupid, but I don't want to bother with fixing it.
-        final NQueensCell rotationX = ROTATIONS_X[times -1];
-        final NQueensCell rotationY = ROTATIONS_Y[times - 1];
+        final NQueensCell rotationX = ROTATIONS_X[times];
+        final NQueensCell rotationY = ROTATIONS_Y[times];
 
         return queens.stream()
                 .map(cell -> {
@@ -101,8 +99,6 @@ public class HashStringUtils {
 
     /**
      * Generates all rotations of the given queens, then all the mirrors of all the rotations plus the original.
-     * @param queens
-     * @param n
      */
     public Set<String> generateHashStrings(final Set<Integer> queens, final int n) {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a

@@ -39,8 +39,7 @@ public class NQueensDFS {
         }
         final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells);
         boardStateStack.add(initialBoardState);
-        hashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n)
-                .forEach(boardStateHashes::add);
+        boardStateHashes.addAll(hashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n));
 
         final Instant start = Instant.now();
 
@@ -78,7 +77,7 @@ public class NQueensDFS {
                 }
 
                 // 3.c. Register all new hashes to avoid repetitions in the future
-                newBoardHashes.forEach(boardStateHashes::add);
+                boardStateHashes.addAll(newBoardHashes);
                 boardStateStack.add(newBoardState);
             };
         }
@@ -92,8 +91,8 @@ public class NQueensDFS {
         System.out.println("Total boards pruned: " + totalPrunedBoards);
 
         final Instant end = Instant.now();
-        final long ellapsedMillis = end.toEpochMilli() - start.toEpochMilli();
-        System.out.println("Time ellapsed (millis): " + ellapsedMillis);
+        final long elapsedMillis = end.toEpochMilli() - start.toEpochMilli();
+        System.out.println("Time elapsed (millis): " + elapsedMillis);
     }
 
     private static final long totalPermutations(final long k, final long n) {
