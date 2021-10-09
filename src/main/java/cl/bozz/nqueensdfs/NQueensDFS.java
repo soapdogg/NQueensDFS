@@ -2,9 +2,9 @@ package cl.bozz.nqueensdfs;
 
 import cl.bozz.nqueensdfs.datamodels.NQueensCell;
 import cl.bozz.nqueensdfs.models.BoardState;
+import cl.bozz.nqueensdfs.utils.BoardPrinter;
 import cl.bozz.nqueensdfs.utils.HashStringUtils;
 
-import java.math.BigInteger;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,13 +13,13 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 9;
+        final int n = 8;
         new NQueensDFS().start(n);
     }
 
     public void start(final int n) {
         final long totalCells = (long) n * n;
-        final BigInteger totalPermutations = totalPermutations(totalCells, n);
+        final long totalPermutations = totalPermutations(totalCells, n);
 
         // Instantiate auxiliary objects and metrics
         final HashStringUtils hashStringUtils = new HashStringUtils();
@@ -51,7 +51,7 @@ public class NQueensDFS {
             final BoardState boardState = boardStateStack.pop();
             totalBoardsProcessed ++;
             if (totalBoardsProcessed % 100 * n == 0) {
-                System.out.println("Processed " + totalBoardsProcessed + "/" + totalPermutations.toString() + " boards; found " + totalTerminalBoards + " terminals, pruned " + totalPrunedBoards);
+                System.out.println("Processed " + totalBoardsProcessed + "/" + totalPermutations + " boards; found " + totalTerminalBoards + " terminals, pruned " + totalPrunedBoards);
             }
 
             // 2. Filter out terminal boards and count them towards total
@@ -85,8 +85,8 @@ public class NQueensDFS {
         }
 
         // Emit metrics
-        terminalBoardStates.forEach(boardState -> System.out.println(boardState.toString()));
-        System.out.println("Max board permutations: " + totalPermutations.toString());
+        terminalBoardStates.forEach(BoardPrinter.INSTANCE::printBoard);
+        System.out.println("Max board permutations: " + totalPermutations);
         System.out.println("Total terminal boards: " + totalTerminalBoards);
         System.out.println("Unique terminal boards identified: " + terminalBoardStates.size());
         System.out.println("Total boards processed: " + totalBoardsProcessed);
@@ -97,11 +97,11 @@ public class NQueensDFS {
         System.out.println("Time ellapsed (millis): " + ellapsedMillis);
     }
 
-    private static final BigInteger totalPermutations(final long k, final long n) {
-        BigInteger result = BigInteger.valueOf(k);
+    private static final long totalPermutations(final long k, final long n) {
+        long result = k;
         for (long i = 1; i < n; i ++) {
-            final BigInteger mult = BigInteger.valueOf(k - i);
-            result = result.multiply(mult);
+            final long mult = k - i;
+            result = result * mult;
         }
         return result;
     }

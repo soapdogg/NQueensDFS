@@ -6,13 +6,20 @@ import lombok.Value;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 @Value
 public class BoardState {
     private final Set<NQueensCell> queenPositions;
     private final Set<NQueensCell> availableCells;
     private final int n;
+
+    public int getN() {
+        return n;
+    }
+
+    public final Set<NQueensCell> getQueenPositions() {
+        return queenPositions;
+    }
 
     /**
      * Create a new board that's identical to this one, but with one additional queen in a given position. Returns null
@@ -115,24 +122,5 @@ public class BoardState {
                 .forEach(result::add);
 
         return result;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuilder stringBuilder = new StringBuilder();
-
-        for (int x = 0; x < n; x ++) {
-            for (int y = 0; y < n; y ++) {
-                final NQueensCell cell = new NQueensCell(x, y);
-                if (queenPositions.contains(cell)) {
-                    stringBuilder.append("Q");
-                } else {
-                    stringBuilder.append("x");
-                }
-            }
-            stringBuilder.append("\n");
-        }
-
-        return stringBuilder.toString();
     }
 }
