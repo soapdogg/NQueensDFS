@@ -5,12 +5,11 @@ import lombok.Value;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 @Value
 public class BoardState {
-    private final SortedSet<Cell> queenPositions;
+    private final Set<Cell> queenPositions;
     private final Set<Cell> availableCells;
     private final int n;
 
@@ -66,7 +65,7 @@ public class BoardState {
         }
 
         // Copy queen positions, plus new queen
-        final SortedSet<Cell> newQueenPositions = new TreeSet<>();
+        final Set<Cell> newQueenPositions = new HashSet<>();
         newQueenPositions.addAll(queenPositions);
         newQueenPositions.add(cell);
 

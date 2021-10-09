@@ -13,11 +13,8 @@ import java.util.TreeSet;
 
 public class NQueensDFS {
     public static void main(final String[] args) {
-        // Parse args
-        if (args.length != 1) {
-            throw new RuntimeException("Invalid input, please provide a board size");
-        }
-        final int n = Integer.parseInt(args[0]);
+
+        final int n = 9;
         new NQueensDFS().start(n);
     }
 
@@ -42,7 +39,7 @@ public class NQueensDFS {
                 initialAvailableCells.add(new Cell(x, y));
             }
         }
-        final BoardState initialBoardState = new BoardState(new TreeSet<>(), initialAvailableCells, n);
+        final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells, n);
         boardStateStack.add(initialBoardState);
         hashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n)
                 .forEach(boardStateHashes::add);
