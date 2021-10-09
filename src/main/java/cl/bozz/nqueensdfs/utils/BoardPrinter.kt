@@ -6,9 +6,9 @@ import cl.bozz.nqueensdfs.models.BoardState
 
 object BoardPrinter {
 
-    fun printBoard(board: BoardState) {
-        for (i in 0 until board.n) {
-            for (j in 0 until board.n) {
+    fun printBoard(board: BoardState, boardSize: Int) {
+        for (i in 0 until boardSize) {
+            for (j in 0 until boardSize) {
                 val cell = NQueensCell(i, j)
                 if (board.queenPositions.contains(cell)) {
                     print('Q')

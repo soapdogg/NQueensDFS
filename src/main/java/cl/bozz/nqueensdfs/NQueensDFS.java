@@ -13,7 +13,7 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 8;
+        final int n = 9;
         new NQueensDFS().start(n);
     }
 
@@ -38,7 +38,7 @@ public class NQueensDFS {
                 initialAvailableCells.add(new NQueensCell(x, y));
             }
         }
-        final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells, n);
+        final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells);
         boardStateStack.add(initialBoardState);
         hashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n)
                 .forEach(boardStateHashes::add);
@@ -63,7 +63,7 @@ public class NQueensDFS {
             }
 
             // 3. Generate child boards. For each...
-            final Set<BoardState> newBoardStates = boardState.generateChildBoardStates();
+            final Set<BoardState> newBoardStates = boardState.generateChildBoardStates(n);
             for(final BoardState newBoardState : newBoardStates) {
                 // 3.a. Generate all 90-degree rotations for each board, and all their mirrors as well
                 //      Using a Set here ensures there's no accidental repetition.
@@ -85,7 +85,7 @@ public class NQueensDFS {
         }
 
         // Emit metrics
-        terminalBoardStates.forEach(BoardPrinter.INSTANCE::printBoard);
+        terminalBoardStates.forEach(boardState -> BoardPrinter.INSTANCE.printBoard(boardState, n));
         System.out.println("Max board permutations: " + totalPermutations);
         System.out.println("Total terminal boards: " + totalTerminalBoards);
         System.out.println("Unique terminal boards identified: " + terminalBoardStates.size());
