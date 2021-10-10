@@ -20,7 +20,13 @@ object ChildBoardStateGenerator {
                         boardSize,
                         boardState.queenPositions
                 )}.map {
-                    BoardState(boardState.queenPositions + it)
+                    val queenPos = BooleanArray(boardSize * boardSize)
+                    for(i in 0 until boardSize * boardSize) {
+                        if (i == it || boardState.queenPositions.contains(i)) {
+                            queenPos[i] = true
+                        }
+                    }
+                    BoardState(queenPos.toTypedArray())
                 }.toSet()
     }
 }

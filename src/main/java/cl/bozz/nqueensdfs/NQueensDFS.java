@@ -14,7 +14,7 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 8;
+        final int n = 9;
         start(n);
     }
 
@@ -29,7 +29,11 @@ public class NQueensDFS {
         long totalTerminalBoards = 0;
         long totalPrunedBoards = 0;
 
-        final BoardState initialBoardState = new BoardState(new HashSet<>());
+        Boolean [] queenPos = new Boolean[n * n];
+        for (int i = 0; i < n * n; ++i) {
+            queenPos[i] = false;
+        }
+        final BoardState initialBoardState = new BoardState(queenPos);
         boardStateStack.add(initialBoardState);
         final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.INSTANCE.generateHashStrings(initialBoardState.getQueenPositions(), n));
 
