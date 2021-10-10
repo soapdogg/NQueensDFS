@@ -2,10 +2,6 @@ package cl.bozz.nqueensdfs.utils
 
 import cl.bozz.nqueensdfs.utils.MirrorUtil.getAllMirrors
 import cl.bozz.nqueensdfs.utils.RotationUtil.getAllRotations
-import cl.bozz.nqueensdfs.utils.MirrorUtil
-import cl.bozz.nqueensdfs.datamodels.NQueensCell
-import cl.bozz.nqueensdfs.utils.RotationUtil
-import cl.bozz.nqueensdfs.utils.HashStringUtils
 import java.util.stream.Collectors
 
 object HashStringUtils {
@@ -19,13 +15,13 @@ object HashStringUtils {
         var result = getAllMirrors(queens, n)
                 .map { mirroredQueens: Set<Int> -> getAllRotations(mirroredQueens, n) }
                 .flatMap{ it.toSet()}
-                .map { obj: Set<NQueensCell> -> generateHashString(obj) }.toSet()
-        val nq = queens.stream().map { queen: Int -> NQueensCell(queen / n, queen % n) }.collect(Collectors.toSet())
+                .map { obj: Set<Pair<Int, Int>> -> generateHashString(obj) }.toSet()
+        val nq = queens.stream().map { queen: Int -> Pair(queen / n, queen % n) }.collect(Collectors.toSet())
         result += (generateHashString(nq))
         return result
     }
 
-    private fun generateHashString(queenList: Set<NQueensCell>): String {
+    private fun generateHashString(queenList: Set<Pair<Int, Int>>): String {
         var result = ""
         for (queenCell in queenList) {
             result += queenCell
