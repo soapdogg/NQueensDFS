@@ -1,6 +1,5 @@
 package cl.bozz.nqueensdfs.utils
 
-import cl.bozz.nqueensdfs.utils.MirrorUtil.getAllMirrors
 import cl.bozz.nqueensdfs.utils.RotationUtil.getAllRotations
 
 object HashStringUtils {

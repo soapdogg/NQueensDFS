@@ -13,11 +13,11 @@ object ChildBoardStateGenerator {
             val isValidQueenPos = ValidQueenPositionDeterminer.isQueenPositionValid(
                     i,
                     boardSize,
-                    boardState.queenPositionsA,
+                    boardState.queenPositions,
                     boardState.size,
             )
             if (isValidQueenPos) {
-                val copy = boardState.queenPositionsA.copyOf()
+                val copy = boardState.queenPositions.copyOf()
                 copy[i] = true
                 availableCells.add(BoardState(copy, boardState.size + 1))
             }
