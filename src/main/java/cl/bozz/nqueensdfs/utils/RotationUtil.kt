@@ -1,21 +1,14 @@
 package cl.bozz.nqueensdfs.utils
 
 import cl.bozz.nqueensdfs.datamodels.NQueensCell
-import java.util.function.Supplier
 import java.util.stream.Collectors
 
 object RotationUtil {
 
-    // Rotation constants. Should have used 4 maps instead of using Cell as a tuple. Eh.
-    private val ROTATIONS_X = arrayOf(
-            NQueensCell(0, -1),
-            NQueensCell(-1, 0),
-            NQueensCell(0, 1)
-    )
-    private val ROTATIONS_Y = arrayOf(
-            NQueensCell(1, 0),
-            NQueensCell(0, -1),
-            NQueensCell(-1, 0)
+    private val ROTATIONS = arrayOf(
+        Pair(Pair(0, -1), Pair(1, 0)),
+        Pair(Pair(-1, 0), Pair(0, -1)),
+        Pair(Pair(0, 1), Pair(-1, 0))
     )
 
     fun getAllRotations(queens: Set<Int>, n: Int): Set<Set<NQueensCell>> {
@@ -35,8 +28,7 @@ object RotationUtil {
         val center = (n - 1).toDouble() / 2
 
         // I still think using Cell for this is stupid, but I don't want to bother with fixing it.
-        val (x, y) = ROTATIONS_X[times]
-        val (x1, y1) = ROTATIONS_Y[times]
+        val (x, y) = ROTATIONS[times]
         return queens.stream()
                 .map { cell: Int ->
                     // New cell = (Old cell - center) * rotation + center.
@@ -47,9 +39,9 @@ object RotationUtil {
                     val cellY = cell % n
                     val baseX = cellX.toDouble() - center
                     val baseY = cellY.toDouble() - center
-                    val rotatedX = baseX * x + baseY * y + center
-                    val rotatedY = baseX * x1 + baseY * y1 + center
+                    val rotatedX = baseX * x.first + baseY * y.first + center
+                    val rotatedY = baseX * x.second + baseY * y.second + center
                     NQueensCell(rotatedX.toInt(), rotatedY.toInt())
-                }.collect(Collectors.toCollection(Supplier { HashSet() }))
+                }.collect(Collectors.toCollection { HashSet() })
     }
 }
