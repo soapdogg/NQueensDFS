@@ -14,7 +14,7 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 8;
+        final int n = 9;
         start(n);
     }
 
@@ -31,7 +31,7 @@ public class NQueensDFS {
 
         final BoardState initialBoardState = new BoardState(new HashSet<>());
         boardStateStack.add(initialBoardState);
-        final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n));
+        final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.INSTANCE.generateHashStrings(initialBoardState.getQueenPositions(), n));
 
         final Instant start = Instant.now();
 
@@ -48,7 +48,7 @@ public class NQueensDFS {
             if (boardState.getQueenPositions().size() == n) {
                 terminalBoardStates.add(boardState);
                 // TODO: generating the hashes here again is kinda wasteful... maybe store them?
-                totalTerminalBoards += HashStringUtils.generateHashStrings(boardState.getQueenPositions(), n).size();
+                totalTerminalBoards += HashStringUtils.INSTANCE.generateHashStrings(boardState.getQueenPositions(), n).size();
                 continue;
             }
 
@@ -58,7 +58,7 @@ public class NQueensDFS {
                 // 3.a. Generate all 90-degree rotations for each board, and all their mirrors as well
                 //      Using a Set here ensures there's no accidental repetition.
                 //      This is a *huge* time saver! It prunes the DFS tree early to a small fraction of its real size.
-                final Set<String> newBoardHashes = HashStringUtils.generateHashStrings(newBoardState.getQueenPositions(), n);
+                final Set<String> newBoardHashes = HashStringUtils.INSTANCE.generateHashStrings(newBoardState.getQueenPositions(), n);
 
                 // 3.b. Filter out the board if any of the hashes is already registered
                 //      Since they're all topologically identical, there's no need to keep any of them
