@@ -8,7 +8,7 @@ object BoardPrinter {
         for (i in 0 until boardSize) {
             for (j in 0 until boardSize) {
                 val cell = (i * boardSize) + j
-                if (board.queenPositions.contains(cell)) {
+                if (board.queenPositionsA[cell]) {
                     print('Q')
                 } else {
                     print('x')

@@ -1,6 +1,5 @@
 package cl.bozz.nqueensdfs.utils
 
-import cl.bozz.nqueensdfs.models.BoardState
 import cl.bozz.nqueensdfs.utils.DiagonalChecker.performDiagonalCheck
 
 object ValidQueenPositionDeterminer {

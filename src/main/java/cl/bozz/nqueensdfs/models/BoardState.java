@@ -7,6 +7,7 @@ import java.util.Set;
 
 @Value
 public class BoardState {
+    Boolean[] queenPositionsA;
     Set<Integer> queenPositions;
 
     public BoardState(
@@ -18,9 +19,14 @@ public class BoardState {
                 this.queenPositions.add(i);
             }
         }
+        this.queenPositionsA = queenPositions;
     }
 
     public Set<Integer> getQueenPositions() {
         return queenPositions;
+    }
+
+    public Boolean[] getQueenPositionsA() {
+        return this.queenPositionsA;
     }
 }

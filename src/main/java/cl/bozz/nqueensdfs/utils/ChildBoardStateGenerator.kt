@@ -8,25 +8,19 @@ object ChildBoardStateGenerator {
         boardState: BoardState,
         boardSize: Int
     ): Set<BoardState> {
-        val availableCells = mutableSetOf<Int>()
+        val availableCells = mutableSetOf<BoardState>()
         for (i in 0 until boardSize * boardSize) {
-            if (!boardState.queenPositions.contains(i)) {
-                availableCells.add(i)
+            val isValidQueenPos = ValidQueenPositionDeterminer.isQueenPositionValid(
+                i,
+                boardSize,
+                boardState.queenPositions
+            )
+            if (isValidQueenPos) {
+                val copy = boardState.queenPositionsA.copyOf()
+                copy[i] = true
+                availableCells.add(BoardState(copy))
             }
         }
         return availableCells
-                .filter { availableCell: Int -> ValidQueenPositionDeterminer.isQueenPositionValid(
-                        availableCell,
-                        boardSize,
-                        boardState.queenPositions
-                )}.map {
-                    val queenPos = BooleanArray(boardSize * boardSize)
-                    for(i in 0 until boardSize * boardSize) {
-                        if (i == it || boardState.queenPositions.contains(i)) {
-                            queenPos[i] = true
-                        }
-                    }
-                    BoardState(queenPos.toTypedArray())
-                }.toSet()
     }
 }
