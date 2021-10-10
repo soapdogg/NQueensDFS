@@ -2,7 +2,6 @@ package cl.bozz.nqueensdfs.utils
 
 import cl.bozz.nqueensdfs.utils.MirrorUtil.getAllMirrors
 import cl.bozz.nqueensdfs.utils.RotationUtil.getAllRotations
-import java.util.stream.Collectors
 
 object HashStringUtils {
     /**
@@ -12,13 +11,10 @@ object HashStringUtils {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a
         // board that's symmetrical on both axes, where rotations and mirroring do nothing... but that's still just 15
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
-        var result = getAllMirrors(queens, n)
+        return getAllMirrors(queens, n)
                 .map { mirroredQueens: Set<Int> -> getAllRotations(mirroredQueens, n) }
-                .flatMap{ it.toSet()}
+                .flatMap { it.toSet() }
                 .map { obj: Set<Pair<Int, Int>> -> generateHashString(obj) }.toSet()
-        val nq = queens.stream().map { queen: Int -> Pair(queen / n, queen % n) }.collect(Collectors.toSet())
-        result += (generateHashString(nq))
-        return result
     }
 
     private fun generateHashString(queenList: Set<Pair<Int, Int>>): String {
