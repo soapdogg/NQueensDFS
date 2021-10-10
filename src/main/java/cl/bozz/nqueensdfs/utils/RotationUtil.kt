@@ -26,7 +26,6 @@ object RotationUtil {
         // We use (n - 1) because cell positions start at 0 and end at (n - 1).
         val center = (n - 1).toDouble() / 2
 
-        // I still think using Cell for this is stupid, but I don't want to bother with fixing it.
         val (x, y) = ROTATIONS[times]
         return queens.stream()
                 .map { cell: Int ->

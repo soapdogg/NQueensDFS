@@ -7,7 +7,6 @@ object DiagonalChecker {
         cellY: Int,
         xDelta: Int,
         yDelta: Int,
-        newAvailableCells: MutableSet<Int>,
         queenPositions: Set<Int>,
         boardSize: Int
     ): Boolean {
@@ -21,7 +20,6 @@ object DiagonalChecker {
             if (queenPositions.contains(diagCellInt)) {
                 return true
             }
-            newAvailableCells.remove(diagCellInt)
             x += xDelta
             y += yDelta
         } while (x in 0 until boardSize && y in 0 until boardSize)
