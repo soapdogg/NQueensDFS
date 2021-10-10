@@ -16,13 +16,12 @@ object HashStringUtils {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a
         // board that's symmetrical on both axes, where rotations and mirroring do nothing... but that's still just 15
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
-        val result = getAllMirrors(queens, n).stream()
+        var result = getAllMirrors(queens, n)
                 .map { mirroredQueens: Set<Int> -> getAllRotations(mirroredQueens, n) }
-                .flatMap { obj: Set<Set<NQueensCell>> -> obj.stream() }
-                .map { obj: Set<NQueensCell> -> generateHashString(obj) }
-                .collect(Collectors.toSet())
+                .flatMap{ it.toSet()}
+                .map { obj: Set<NQueensCell> -> generateHashString(obj) }.toSet()
         val nq = queens.stream().map { queen: Int -> NQueensCell(queen / n, queen % n) }.collect(Collectors.toSet())
-        result.add(generateHashString(nq))
+        result += (generateHashString(nq))
         return result
     }
 
