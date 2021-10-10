@@ -2,7 +2,7 @@ package cl.bozz.nqueensdfs.utils
 
 object DiagonalChecker {
 
-    fun cantPerformDiagonalCheck(
+    fun performDiagonalCheck(
         cellX: Int,
         cellY: Int,
         xDelta: Int,

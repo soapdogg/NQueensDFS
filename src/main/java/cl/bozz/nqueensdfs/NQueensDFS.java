@@ -4,6 +4,7 @@ import cl.bozz.nqueensdfs.models.BoardState;
 import cl.bozz.nqueensdfs.utils.BoardPrinter;
 import cl.bozz.nqueensdfs.utils.ChildBoardStateGenerator;
 import cl.bozz.nqueensdfs.utils.HashStringUtils;
+import cl.bozz.nqueensdfs.utils.TotalPermutationsCalculator;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -18,8 +19,7 @@ public class NQueensDFS {
     }
 
     public static void start(final int n) {
-        final long totalCells = (long) n * n;
-        final long totalPermutations = totalPermutations(totalCells, n);
+        final long totalPermutations = TotalPermutationsCalculator.INSTANCE.totalPermutations(n);
 
         // Instantiate auxiliary objects and metrics
         final Stack<BoardState> boardStateStack = new Stack<>();
@@ -29,14 +29,7 @@ public class NQueensDFS {
         long totalTerminalBoards = 0;
         long totalPrunedBoards = 0;
 
-        // Set up initial board
-        final Set<Integer> initialAvailableCells = new HashSet<>();
-        for (int x = 0; x < n; x ++) {
-            for (int y = 0; y < n; y ++) {
-                initialAvailableCells.add((x * n) + y);
-            }
-        }
-        final BoardState initialBoardState = new BoardState(new HashSet<>(), initialAvailableCells);
+        final BoardState initialBoardState = new BoardState(new HashSet<>());
         boardStateStack.add(initialBoardState);
         final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.generateHashStrings(initialBoardState.getQueenPositions(), n));
 
@@ -92,14 +85,5 @@ public class NQueensDFS {
         final Instant end = Instant.now();
         final long elapsedMillis = end.toEpochMilli() - start.toEpochMilli();
         System.out.println("Time elapsed (millis): " + elapsedMillis);
-    }
-
-    private static final long totalPermutations(final long k, final long n) {
-        long result = k;
-        for (long i = 1; i < n; i ++) {
-            final long mult = k - i;
-            result = result * mult;
-        }
-        return result;
     }
 }

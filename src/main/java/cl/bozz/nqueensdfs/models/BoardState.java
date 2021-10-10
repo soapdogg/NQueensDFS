@@ -8,12 +8,7 @@ import java.util.Set;
 
 @Value
 public class BoardState {
-    private final Set<Integer> queenPositions;
-    private final Set<Integer> availableCells;
-
-    public Set<Integer> getAvailableCells() {
-        return availableCells;
-    }
+    Set<Integer> queenPositions;
 
     public Set<Integer> getQueenPositions() {
         return queenPositions;
@@ -23,15 +18,17 @@ public class BoardState {
      * Create a new board that's identical to this one, but with one additional queen in a given position. Returns null
      * if a new board is not viable.
      */
-    public BoardState addQueen(final int cell, final int boardSize) {
+    public BoardState addQueen(
+        final int cell,
+        final int boardSize,
+        final Set<Integer> availableCells
+    ) {
         // Edge cases to terminate recursive DFS. Some are redundant, but who cares?
         int cellX = cell / boardSize;
         int cellY = cell % boardSize;
         if (
                 queenPositions.size() == boardSize             // Terminal board, can't add more queens
                 || queenPositions.contains(cell)       // This queen already exists
-                //|| cellX < 0 || cellX >= boardSize // Out of bounds - X
-                //|| cellY < 0 || cellY >= boardSize // Out of bounds - Y
         ) {
             return null;
         }
@@ -59,10 +56,10 @@ public class BoardState {
 
         // Try to remove diagonal rows under the new queen's range
         if (
-                DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY, -1, -1, newAvailableCells, queenPositions, boardSize)
-                || DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY,  1, -1, newAvailableCells, queenPositions, boardSize)
-                || DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY,  -1, 1, newAvailableCells, queenPositions, boardSize)
-                || DiagonalChecker.INSTANCE.cantPerformDiagonalCheck(cellX, cellY,  1, 1, newAvailableCells, queenPositions, boardSize)
+                DiagonalChecker.INSTANCE.performDiagonalCheck(cellX, cellY, -1, -1, newAvailableCells, queenPositions, boardSize)
+                || DiagonalChecker.INSTANCE.performDiagonalCheck(cellX, cellY,  1, -1, newAvailableCells, queenPositions, boardSize)
+                || DiagonalChecker.INSTANCE.performDiagonalCheck(cellX, cellY,  -1, 1, newAvailableCells, queenPositions, boardSize)
+                || DiagonalChecker.INSTANCE.performDiagonalCheck(cellX, cellY,  1, 1, newAvailableCells, queenPositions, boardSize)
         ) {
             return null;
         }
@@ -72,6 +69,6 @@ public class BoardState {
         newQueenPositions.add(cell);
 
         // Done!
-        return new BoardState(newQueenPositions, newAvailableCells);
+        return new BoardState(newQueenPositions);
     }
 }
