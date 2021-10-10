@@ -33,7 +33,7 @@ public class NQueensDFS {
         for (int i = 0; i < n * n; ++i) {
             queenPos[i] = false;
         }
-        final BoardState initialBoardState = new BoardState(queenPos);
+        final BoardState initialBoardState = new BoardState(queenPos, 0);
         boardStateStack.add(initialBoardState);
         final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.INSTANCE.generateHashStrings(initialBoardState.getQueenPositions(), n));
 
@@ -49,7 +49,7 @@ public class NQueensDFS {
             }
 
             // 2. Filter out terminal boards and count them towards total
-            if (boardState.getQueenPositions().size() == n) {
+            if (boardState.getSize() == n) {
                 terminalBoardStates.add(boardState);
                 // TODO: generating the hashes here again is kinda wasteful... maybe store them?
                 totalTerminalBoards += HashStringUtils.INSTANCE.generateHashStrings(boardState.getQueenPositions(), n).size();
@@ -75,7 +75,7 @@ public class NQueensDFS {
                 // 3.c. Register all new hashes to avoid repetitions in the future
                 boardStateHashes.addAll(newBoardHashes);
                 boardStateStack.add(newBoardState);
-            };
+            }
         }
 
         // Emit metrics

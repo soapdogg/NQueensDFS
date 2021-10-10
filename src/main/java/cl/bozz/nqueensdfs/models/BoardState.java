@@ -9,9 +9,11 @@ import java.util.Set;
 public class BoardState {
     Boolean[] queenPositionsA;
     Set<Integer> queenPositions;
+    int size;
 
     public BoardState(
-        Boolean [] queenPositions
+        Boolean [] queenPositions,
+        int size
     ) {
         this.queenPositions = new HashSet<>();
         for (int i = 0; i < queenPositions.length; ++i) {
@@ -20,6 +22,7 @@ public class BoardState {
             }
         }
         this.queenPositionsA = queenPositions;
+        this.size = size;
     }
 
     public Set<Integer> getQueenPositions() {
@@ -28,5 +31,9 @@ public class BoardState {
 
     public Boolean[] getQueenPositionsA() {
         return this.queenPositionsA;
+    }
+
+    public int getSize() {
+        return this.size;
     }
 }
