@@ -14,7 +14,6 @@ object ChildBoardStateGenerator {
                     i,
                     boardSize,
                     board.queenPositions,
-                    board.size,
             )
             if (isValidQueenPos) {
                 val copy = board.queenPositions.copyOf()

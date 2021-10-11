@@ -20,7 +20,7 @@ public class NQueensDFS {
 
         // Instantiate auxiliary objects and metrics
         final Stack<Board> boardStateStack = new Stack<>();
-        final Set<Board> terminalBoardStates = new HashSet<>();
+        final Set<boolean[]> terminalBoardStates = new HashSet<>();
 
         long totalBoardsProcessed = 0;
         long totalTerminalBoards = 0;
@@ -44,7 +44,7 @@ public class NQueensDFS {
 
             // 2. Filter out terminal boards and count them towards total
             if (boardState.getSize() == n) {
-                terminalBoardStates.add(boardState);
+                terminalBoardStates.add(boardState.getQueenPositions());
                 // TODO: generating the hashes here again is kinda wasteful... maybe store them?
                 final Set<boolean[]> mirroredQueens2 = MirrorUtil.INSTANCE.getAllMirrors(boardState.getQueenPositions(), n);
                 totalTerminalBoards += HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens2, n).size();

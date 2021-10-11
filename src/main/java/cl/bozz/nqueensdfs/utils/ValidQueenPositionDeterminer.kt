@@ -8,11 +8,10 @@ object ValidQueenPositionDeterminer {
         cell: Int,
         boardSize: Int,
         queenPositions: BooleanArray,
-        size: Int,
     ): Boolean {
         // Edge cases to terminate recursive DFS. Some are redundant, but who cares?
-        if (size == boardSize // Terminal board, can't add more queens
-                || queenPositions[cell] // This queen already exists
+        if (
+            queenPositions[cell] // This queen already exists
         ) {
             return false
         }
