@@ -1,10 +1,10 @@
 package cl.bozz.nqueensdfs.utils
 
-import cl.bozz.nqueensdfs.models.BoardState
+import cl.bozz.nqueensdfs.models.Board
 
 object BoardPrinter {
 
-    fun printBoard(board: BoardState, boardSize: Int) {
+    fun printBoard(board: Board, boardSize: Int) {
         for (i in 0 until boardSize) {
             for (j in 0 until boardSize) {
                 val cell = (i * boardSize) + j

@@ -2,7 +2,7 @@ package cl.bozz.nqueensdfs.utils
 
 object MirrorUtil {
 
-    fun getAllMirrors(queens: Array<Boolean>, n: Int): Set<Set<Int>> {
+    fun getAllMirrors(queens: BooleanArray, n: Int): Set<Set<Int>> {
         val results: MutableSet<Set<Int>> = HashSet()
         val mirroredQueens0 = mirror(queens, horizontally = false, vertically = false, n = n)
         results.add(mirroredQueens0)
@@ -16,7 +16,7 @@ object MirrorUtil {
     }
 
     private fun mirror(
-        queens: Array<Boolean>,
+        queens: BooleanArray,
         horizontally: Boolean,
         vertically: Boolean,
         n: Int

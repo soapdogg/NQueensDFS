@@ -7,7 +7,7 @@ object DiagonalChecker {
             cellY: Int,
             xDelta: Int,
             yDelta: Int,
-            queenPositions: Array<Boolean>,
+            queenPositions: BooleanArray,
             boardSize: Int
     ): Boolean {
         // Prepare initial check, this way we don't have to avoid queen self-attack false positives

@@ -7,7 +7,7 @@ object ValidQueenPositionDeterminer {
     fun isQueenPositionValid(
         cell: Int,
         boardSize: Int,
-        queenPositions: Array<Boolean>,
+        queenPositions: BooleanArray,
         size: Int,
     ): Boolean {
         // Edge cases to terminate recursive DFS. Some are redundant, but who cares?

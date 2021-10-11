@@ -1,6 +1,6 @@
 package cl.bozz.nqueensdfs;
 
-import cl.bozz.nqueensdfs.models.BoardState;
+import cl.bozz.nqueensdfs.models.Board;
 import cl.bozz.nqueensdfs.utils.*;
 
 import java.time.Instant;
@@ -19,18 +19,14 @@ public class NQueensDFS {
         final long totalPermutations = TotalPermutationsCalculator.INSTANCE.totalPermutations(n);
 
         // Instantiate auxiliary objects and metrics
-        final Stack<BoardState> boardStateStack = new Stack<>();
-        final Set<BoardState> terminalBoardStates = new HashSet<>();
+        final Stack<Board> boardStateStack = new Stack<>();
+        final Set<Board> terminalBoardStates = new HashSet<>();
 
         long totalBoardsProcessed = 0;
         long totalTerminalBoards = 0;
         long totalPrunedBoards = 0;
 
-        Boolean [] queenPos = new Boolean[n * n];
-        for (int i = 0; i < n * n; ++i) {
-            queenPos[i] = false;
-        }
-        final BoardState initialBoardState = new BoardState(queenPos, 0);
+        final Board initialBoardState = InitialBoardGenerator.INSTANCE.generateInitialBoard(n);
         boardStateStack.add(initialBoardState);
         final Set<Set<Integer>> mirroredQueens = MirrorUtil.INSTANCE.getAllMirrors(initialBoardState.getQueenPositions(), n);
         final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens, n));
@@ -40,7 +36,7 @@ public class NQueensDFS {
         // Main loop:
         while (!boardStateStack.empty()) {
             // 1. Pop from stack
-            final BoardState boardState = boardStateStack.pop();
+            final Board boardState = boardStateStack.pop();
             totalBoardsProcessed ++;
             if (totalBoardsProcessed % 100 * n == 0) {
                 System.out.println("Processed " + totalBoardsProcessed + "/" + totalPermutations + " boards; found " + totalTerminalBoards + " terminals, pruned " + totalPrunedBoards);
@@ -56,8 +52,8 @@ public class NQueensDFS {
             }
 
             // 3. Generate child boards. For each...
-            final Set<BoardState> newBoardStates = ChildBoardStateGenerator.INSTANCE.generateChildBoardStates(boardState, n);
-            for(final BoardState newBoardState : newBoardStates) {
+            final Set<Board> newBoardStates = ChildBoardStateGenerator.INSTANCE.generateChildBoardStates(boardState, n);
+            for(final Board newBoardState : newBoardStates) {
                 // 3.a. Generate all 90-degree rotations for each board, and all their mirrors as well
                 //      Using a Set here ensures there's no accidental repetition.
                 //      This is a *huge* time saver! It prunes the DFS tree early to a small fraction of its real size.

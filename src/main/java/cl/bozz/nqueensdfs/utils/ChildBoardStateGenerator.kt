@@ -1,25 +1,25 @@
 package cl.bozz.nqueensdfs.utils
 
-import cl.bozz.nqueensdfs.models.BoardState
+import cl.bozz.nqueensdfs.models.Board
 
 object ChildBoardStateGenerator {
 
     fun generateChildBoardStates(
-        boardState: BoardState,
-        boardSize: Int
-    ): Set<BoardState> {
-        val availableCells = mutableSetOf<BoardState>()
+            board: Board,
+            boardSize: Int
+    ): Set<Board> {
+        val availableCells = mutableSetOf<Board>()
         for (i in 0 until boardSize * boardSize) {
             val isValidQueenPos = ValidQueenPositionDeterminer.isQueenPositionValid(
                     i,
                     boardSize,
-                    boardState.queenPositions,
-                    boardState.size,
+                    board.queenPositions,
+                    board.size,
             )
             if (isValidQueenPos) {
-                val copy = boardState.queenPositions.copyOf()
+                val copy = board.queenPositions.copyOf()
                 copy[i] = true
-                availableCells.add(BoardState(copy, boardState.size + 1))
+                availableCells.add(Board(copy, board.size + 1))
             }
         }
         return availableCells
