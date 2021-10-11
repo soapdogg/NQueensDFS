@@ -2,7 +2,7 @@ package cl.bozz.nqueensdfs.utils
 
 object DiagonalChecker {
 
-    fun performDiagonalCheck(
+    fun isQueenInDiagonal(
             cellX: Int,
             cellY: Int,
             xDelta: Int,

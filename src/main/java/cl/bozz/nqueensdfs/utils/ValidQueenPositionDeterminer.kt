@@ -1,6 +1,6 @@
 package cl.bozz.nqueensdfs.utils
 
-import cl.bozz.nqueensdfs.utils.DiagonalChecker.performDiagonalCheck
+import cl.bozz.nqueensdfs.utils.DiagonalChecker.isQueenInDiagonal
 
 object ValidQueenPositionDeterminer {
 
@@ -31,10 +31,10 @@ object ValidQueenPositionDeterminer {
         }
 
         // Try to remove diagonal rows under the new queen's range
-        if (performDiagonalCheck(cellX, cellY, -1, -1, queenPositions, boardSize)
-                || performDiagonalCheck(cellX, cellY, 1, -1, queenPositions, boardSize)
-                || performDiagonalCheck(cellX, cellY, -1, 1, queenPositions, boardSize)
-                || performDiagonalCheck(cellX, cellY, 1, 1, queenPositions, boardSize)) {
+        if (isQueenInDiagonal(cellX, cellY, -1, -1, queenPositions, boardSize)
+                || isQueenInDiagonal(cellX, cellY, 1, -1, queenPositions, boardSize)
+                || isQueenInDiagonal(cellX, cellY, -1, 1, queenPositions, boardSize)
+                || isQueenInDiagonal(cellX, cellY, 1, 1, queenPositions, boardSize)) {
             return false
         }
 

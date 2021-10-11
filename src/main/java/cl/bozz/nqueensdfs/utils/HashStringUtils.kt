@@ -4,17 +4,15 @@ import cl.bozz.nqueensdfs.utils.RotationUtil.getAllRotations
 
 object HashStringUtils {
 
-    fun generateHashStringsFromMirrors(mirroredQueens: Set<BooleanArray>, boardSize: Int): Set<String> {
+    fun generateHashStrings(mirroredAndRotatedBoards: Set<BooleanArray>): Set<String> {
         // This is slightly wasteful in that it doesn't check for repeats during generation. Worst-case scenario is a
         // board that's symmetrical on both axes, where rotations and mirroring do nothing... but that's still just 15
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
-        return mirroredQueens.map { mirroredQueen: BooleanArray -> getAllRotations(mirroredQueen, boardSize) }
-                .flatMap { it.toSet() }
+        return mirroredAndRotatedBoards
                 .map { obj: BooleanArray -> generateHashString(obj) }.toSet()
     }
 
     private fun generateHashString(queenList: BooleanArray): String {
-
         var result = ""
         for (i in queenList.indices) {
             if (queenList[i]) {
