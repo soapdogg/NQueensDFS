@@ -11,7 +11,7 @@ import java.util.Stack;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 8;
+        final int n = 9;
         start(n);
     }
 
@@ -28,7 +28,7 @@ public class NQueensDFS {
 
         final Board initialBoardState = InitialBoardGenerator.INSTANCE.generateInitialBoard(n);
         boardStateStack.add(initialBoardState);
-        final Set<Set<Integer>> mirroredQueens = MirrorUtil.INSTANCE.getAllMirrors(initialBoardState.getQueenPositions(), n);
+        final Set<boolean[]> mirroredQueens = MirrorUtil.INSTANCE.getAllMirrors(initialBoardState.getQueenPositions(), n);
         final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens, n));
 
         final Instant start = Instant.now();
@@ -46,7 +46,7 @@ public class NQueensDFS {
             if (boardState.getSize() == n) {
                 terminalBoardStates.add(boardState);
                 // TODO: generating the hashes here again is kinda wasteful... maybe store them?
-                final Set<Set<Integer>> mirroredQueens2 = MirrorUtil.INSTANCE.getAllMirrors(boardState.getQueenPositions(), n);
+                final Set<boolean[]> mirroredQueens2 = MirrorUtil.INSTANCE.getAllMirrors(boardState.getQueenPositions(), n);
                 totalTerminalBoards += HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens2, n).size();
                 continue;
             }
@@ -57,7 +57,7 @@ public class NQueensDFS {
                 // 3.a. Generate all 90-degree rotations for each board, and all their mirrors as well
                 //      Using a Set here ensures there's no accidental repetition.
                 //      This is a *huge* time saver! It prunes the DFS tree early to a small fraction of its real size.
-                final Set<Set<Integer>> mirroredQueens3 = MirrorUtil.INSTANCE.getAllMirrors(newBoardState.getQueenPositions(), n);
+                final Set<boolean[]> mirroredQueens3 = MirrorUtil.INSTANCE.getAllMirrors(newBoardState.getQueenPositions(), n);
                 final Set<String> newBoardHashes = HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens3, n);
 
                 // 3.b. Filter out the board if any of the hashes is already registered
