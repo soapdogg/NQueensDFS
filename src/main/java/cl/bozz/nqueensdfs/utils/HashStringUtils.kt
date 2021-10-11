@@ -10,18 +10,14 @@ object HashStringUtils {
         // wasted board computations. Symmetry checks would be much more complicated and wasteful.
         return mirroredQueens.map { mirroredQueen: Set<Int> -> getAllRotations(mirroredQueen, n) }
                 .flatMap { it.toSet() }
-                .map { obj: Set<Pair<Int, Int>> -> generateHashString(obj, n) }.toSet()
+                .map { obj: Set<Int> -> generateHashString(obj, n) }.toSet()
     }
 
-    private fun generateHashString(queenList: Set<Pair<Int, Int>>, n: Int): String {
-        val queenPos = queenList.map {
-            it.first * n + it.second
-        }
+    private fun generateHashString(queenList: Set<Int>, n: Int): String {
         val boolArray = BooleanArray(n * n)
-        queenPos.forEach{
+        queenList.forEach{
             boolArray[it] = true
         }
-
 
         var result = ""
         for (i in boolArray.indices) {
