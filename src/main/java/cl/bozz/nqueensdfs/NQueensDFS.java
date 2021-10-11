@@ -1,86 +1,16 @@
 package cl.bozz.nqueensdfs;
 
-import cl.bozz.nqueensdfs.models.Board;
 import cl.bozz.nqueensdfs.utils.*;
 
 import java.time.Instant;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
 
 public class NQueensDFS {
     public static void main(final String[] args) {
 
         final int n = 9;
-        start(n);
-    }
-
-    public static void start(final int n) {
-        final long totalPermutations = TotalPermutationsCalculator.INSTANCE.totalPermutations(n);
-
-        // Instantiate auxiliary objects and metrics
-        final Stack<Board> boardStateStack = new Stack<>();
-        final Set<boolean[]> terminalBoardStates = new HashSet<>();
-
-        long totalBoardsProcessed = 0;
-        long totalTerminalBoards = 0;
-        long totalPrunedBoards = 0;
-
-        final Board initialBoardState = InitialBoardGenerator.INSTANCE.generateInitialBoard(n);
-        boardStateStack.add(initialBoardState);
-        final Set<boolean[]> mirroredQueens = MirrorUtil.INSTANCE.getAllMirrors(initialBoardState.getQueenPositions(), n);
-        final Set<String> boardStateHashes = new HashSet<>(HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens, n));
-
         final Instant start = Instant.now();
 
-        // Main loop:
-        while (!boardStateStack.empty()) {
-            // 1. Pop from stack
-            final Board boardState = boardStateStack.pop();
-            totalBoardsProcessed ++;
-            if (totalBoardsProcessed % 100 * n == 0) {
-                System.out.println("Processed " + totalBoardsProcessed + "/" + totalPermutations + " boards; found " + totalTerminalBoards + " terminals, pruned " + totalPrunedBoards);
-            }
-
-            // 2. Filter out terminal boards and count them towards total
-            if (boardState.getSize() == n) {
-                terminalBoardStates.add(boardState.getQueenPositions());
-                // TODO: generating the hashes here again is kinda wasteful... maybe store them?
-                final Set<boolean[]> mirroredQueens2 = MirrorUtil.INSTANCE.getAllMirrors(boardState.getQueenPositions(), n);
-                totalTerminalBoards += HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens2, n).size();
-                continue;
-            }
-
-            // 3. Generate child boards. For each...
-            final Set<Board> newBoardStates = ChildBoardStateGenerator.INSTANCE.generateChildBoardStates(boardState, n);
-            for(final Board newBoardState : newBoardStates) {
-                // 3.a. Generate all 90-degree rotations for each board, and all their mirrors as well
-                //      Using a Set here ensures there's no accidental repetition.
-                //      This is a *huge* time saver! It prunes the DFS tree early to a small fraction of its real size.
-                final Set<boolean[]> mirroredQueens3 = MirrorUtil.INSTANCE.getAllMirrors(newBoardState.getQueenPositions(), n);
-                final Set<String> newBoardHashes = HashStringUtils.INSTANCE.generateHashStringsFromMirrors(mirroredQueens3, n);
-
-                // 3.b. Filter out the board if any of the hashes is already registered
-                //      Since they're all topologically identical, there's no need to keep any of them
-                boolean shouldPrune = newBoardHashes.stream().anyMatch(boardStateHashes::contains);
-                if (shouldPrune) {
-                    totalPrunedBoards ++;
-                    continue;
-                }
-
-                // 3.c. Register all new hashes to avoid repetitions in the future
-                boardStateHashes.addAll(newBoardHashes);
-                boardStateStack.add(newBoardState);
-            }
-        }
-
-        // Emit metrics
-        terminalBoardStates.forEach(boardState -> BoardPrinter.INSTANCE.printBoard(boardState, n));
-        System.out.println("Max board permutations: " + totalPermutations);
-        System.out.println("Total terminal boards: " + totalTerminalBoards);
-        System.out.println("Unique terminal boards identified: " + terminalBoardStates.size());
-        System.out.println("Total boards processed: " + totalBoardsProcessed);
-        System.out.println("Total boards pruned: " + totalPrunedBoards);
+        DFSOrchestrator.INSTANCE.orchestrateDFS(n);
 
         final Instant end = Instant.now();
         final long elapsedMillis = end.toEpochMilli() - start.toEpochMilli();
