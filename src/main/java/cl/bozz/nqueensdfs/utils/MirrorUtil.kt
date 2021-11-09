@@ -2,12 +2,12 @@ package cl.bozz.nqueensdfs.utils
 
 object MirrorUtil {
 
-    fun getAllMirrors(queens: Set<Int>, n: Int): Set<Set<Int>> {
+    fun getAllMirrors(queens: Set<Int>, n: Int): List<Set<Int>> {
         val mirroredQueens0 = mirror(queens, horizontally = false, vertically = false, n = n)
         val mirroredQueens1 = mirror(queens, horizontally = true, vertically = false, n = n)
         val mirroredQueens2 = mirror(queens, horizontally = false, vertically = true, n = n)
         val mirroredQueens3 = mirror(queens, horizontally = true, vertically = true, n = n)
-        return setOf(
+        return listOf(
             mirroredQueens0,
             mirroredQueens1,
             mirroredQueens2,

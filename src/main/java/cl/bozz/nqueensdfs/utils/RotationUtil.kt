@@ -1,5 +1,7 @@
 package cl.bozz.nqueensdfs.utils
 
+import cl.bozz.nqueensdfs.models.Board
+
 object RotationUtil {
 
     private val ROTATIONS = arrayOf(
@@ -8,8 +10,8 @@ object RotationUtil {
         Pair(Pair(0, 1), Pair(-1, 0))
     )
 
-    fun getAllRotations(queens: Set<Int>, boardSize: Int): Set<BooleanArray> {
-        val results: MutableSet<BooleanArray> = HashSet()
+    fun getAllRotations(queens: Set<Int>, boardSize: Int): List<BooleanArray> {
+        val results = mutableListOf<BooleanArray>()
         val boolArray = BooleanArray(boardSize * boardSize)
         for (i in queens) {
             boolArray[i] = true

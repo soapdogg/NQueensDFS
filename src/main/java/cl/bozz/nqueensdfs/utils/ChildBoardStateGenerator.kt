@@ -19,8 +19,7 @@ object ChildBoardStateGenerator {
                 val copy = HashSet(board.queenPositions)
                 copy.add(i)
                 val mirroredQueens = MirrorUtil.getAllMirrors(copy, boardSize)
-                val mirroredAndRotatedQueens = mirroredQueens.map { mirroredQueen -> RotationUtil.getAllRotations(mirroredQueen, boardSize) }
-                        .flatMap { it.toSet() }
+                val mirroredAndRotatedQueens = mirroredQueens.flatMap { mirroredQueen -> RotationUtil.getAllRotations(mirroredQueen, boardSize) }
                 val mAndRSet = mirroredAndRotatedQueens.map {
 
                         val result = mutableSetOf<Int>()
