@@ -13,7 +13,7 @@ object DFSOrchestrator {
         boardSize: Int
     ) {
 
-        val totalPermutations = totalPermutations(boardSize)
+        val totalPermutations = totalPermutations(boardSize.toUInt())
         // Instantiate auxiliary objects and metrics
         val boardStateStack = Stack<Board>()
         val terminalBoardStates = mutableSetOf<Set<Int>>()
