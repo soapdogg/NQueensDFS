@@ -11,6 +11,6 @@ object HashStringUtils {
     }
 
     private fun generateHashString(queenList: Set<Int>): String {
-        return queenList.joinToString("-")
+        return queenList.sorted().joinToString("-")
     }
 }
