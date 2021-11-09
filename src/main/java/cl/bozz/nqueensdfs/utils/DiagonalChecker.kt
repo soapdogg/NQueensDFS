@@ -7,7 +7,7 @@ object DiagonalChecker {
             cellY: Int,
             xDelta: Int,
             yDelta: Int,
-            queenPositions: BooleanArray,
+            queenPositions: Set<Int>,
             boardSize: Int
     ): Boolean {
         // Prepare initial check, this way we don't have to avoid queen self-attack false positives
@@ -16,7 +16,7 @@ object DiagonalChecker {
 
         while (x in 0 until boardSize && y in 0 until boardSize) {
             val diagCellInt = x * boardSize + y
-            if (queenPositions[diagCellInt]) {
+            if (queenPositions.contains(diagCellInt)) {
                 return true
             }
             x += xDelta

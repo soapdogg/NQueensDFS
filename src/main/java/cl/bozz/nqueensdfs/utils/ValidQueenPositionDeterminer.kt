@@ -7,11 +7,11 @@ object ValidQueenPositionDeterminer {
     fun isQueenPositionValid(
         cell: Int,
         boardSize: Int,
-        queenPositions: BooleanArray,
+        queenPositions: Set<Int>,
     ): Boolean {
         // Edge cases to terminate recursive DFS. Some are redundant, but who cares?
         if (
-            queenPositions[cell] // This queen already exists
+            queenPositions.contains(cell) // This queen already exists
         ) {
             return false
         }
@@ -23,8 +23,8 @@ object ValidQueenPositionDeterminer {
             val horizontalCellInt = i * boardSize + cellY
             val verticalCellInt = cellX * boardSize + i
             // We do this *before* updating the queen list to avoid self-attack false positives
-            if (queenPositions[horizontalCellInt]
-                    || queenPositions[verticalCellInt]) {
+            if (queenPositions.contains(horizontalCellInt)
+                    || queenPositions.contains(verticalCellInt)) {
                 // Attacking another queen, discard
                 return false
             }

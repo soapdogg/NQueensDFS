@@ -2,7 +2,7 @@ package cl.bozz.nqueensdfs.utils
 
 object MirrorUtil {
 
-    fun getAllMirrors(queens: BooleanArray, n: Int): Set<BooleanArray> {
+    fun getAllMirrors(queens: Set<Int>, n: Int): Set<BooleanArray> {
         val mirroredQueens0 = mirror(queens, horizontally = false, vertically = false, n = n)
         val mirroredQueens1 = mirror(queens, horizontally = true, vertically = false, n = n)
         val mirroredQueens2 = mirror(queens, horizontally = false, vertically = true, n = n)
@@ -16,7 +16,7 @@ object MirrorUtil {
     }
 
     private fun mirror(
-        queens: BooleanArray,
+        queens: Set<Int>,
         horizontally: Boolean,
         vertically: Boolean,
         n: Int
@@ -24,14 +24,13 @@ object MirrorUtil {
         // Just flips each queen around one or both axes.
         val result = BooleanArray(n * n)
 
-        for (i in queens.indices) {
-            if (queens[i]) {
+        for (i in queens) {
+
                 val queenX = i / n
                 val queenY = i % n
                 val newQueenX = if (horizontally) n - 1 - queenX else queenX
                 val newQueenY = if (vertically) n - 1 - queenY else queenY
                 result[newQueenX * n + newQueenY] = true
-            }
         }
         return result
     }

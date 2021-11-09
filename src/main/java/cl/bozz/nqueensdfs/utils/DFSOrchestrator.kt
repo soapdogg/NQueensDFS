@@ -16,8 +16,8 @@ object DFSOrchestrator {
         val totalPermutations = totalPermutations(boardSize)
         // Instantiate auxiliary objects and metrics
         val boardStateStack = Stack<Board>()
-        val terminalBoardStates = mutableSetOf<BooleanArray>()
-        val initialBoard = BooleanArray(boardSize * boardSize)
+        val terminalBoardStates = mutableSetOf<Set<Int>>()
+        val initialBoard = setOf<Int>()
         val mirroredQueens = getAllMirrors(initialBoard, boardSize)
         val mirroredAndRotatedQueens = mirroredQueens.map { mirroredQueen: BooleanArray -> RotationUtil.getAllRotations(mirroredQueen, boardSize) }
                 .flatMap { it.toSet() }.toSet()

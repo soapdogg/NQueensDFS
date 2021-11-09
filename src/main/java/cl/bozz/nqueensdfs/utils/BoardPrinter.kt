@@ -2,11 +2,11 @@ package cl.bozz.nqueensdfs.utils
 
 object BoardPrinter {
 
-    fun printBoard(queenPositions: BooleanArray, boardSize: Int) {
+    fun printBoard(queenPositions: Set<Int>, boardSize: Int) {
         for (i in 0 until boardSize) {
             for (j in 0 until boardSize) {
                 val cell = (i * boardSize) + j
-                if (queenPositions[cell]) {
+                if (queenPositions.contains(cell)) {
                     print('Q')
                 } else {
                     print('x')
