@@ -7,7 +7,7 @@ import java.time.Instant;
 public class NQueensDFS {
     public static void main(final String[] args) {
 
-        final int n = 8;
+        final int n = 10;
         final Instant start = Instant.now();
 
         DFSOrchestrator.INSTANCE.orchestrateDFS(n);
