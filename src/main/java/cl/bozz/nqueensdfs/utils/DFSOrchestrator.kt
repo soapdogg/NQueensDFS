@@ -18,21 +18,7 @@ object DFSOrchestrator {
         val boardStateStack = Stack<Board>()
         val terminalBoardStates = mutableSetOf<Set<Int>>()
         val initialBoard = setOf<Int>()
-        val mirroredQueens = getAllMirrors(initialBoard, boardSize)
-        val mirroredAndRotatedQueens = mirroredQueens.map { mirroredQueen: Set<Int> -> RotationUtil.getAllRotations(mirroredQueen, boardSize) }
-                .flatMap { it.toSet() }.toSet()
-        val mAndRSet = mirroredAndRotatedQueens.map {
-
-            val result = mutableSetOf<Int>()
-            for (i in it.indices) {
-                if (it[i]) {
-                    result.add(i)
-                }
-            }
-            result
-
-        }.toSet()
-        val boardStateHashes = HashStringUtils.generateHashStrings(mAndRSet).toMutableSet()
+        val boardStateHashes = mutableSetOf<String>()
         val initialBoardState = Board(initialBoard, 0, boardStateHashes)
         boardStateStack.add(initialBoardState)
 
